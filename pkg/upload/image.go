@@ -12,7 +12,7 @@ import (
 const (
 	ImageDirectory         = "img/"
 	TmpUserId              = "0"
-	TmpImageViewingBaseUrl = "localhost:8880"
+	TmpImageViewingBaseUrl = "http://localhost:8880"
 )
 
 func Image(r *moon.Request, c *moon.Configuration) ([]byte, int, error) {
