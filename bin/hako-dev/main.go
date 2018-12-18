@@ -8,6 +8,10 @@ import (
 	"github.com/monkeydioude/moon"
 )
 
+func optionsPoke(r *moon.Request, c *moon.Configuration) ([]byte, int, error) {
+	return []byte("OK"), 200, nil
+}
+
 func main() {
 	h := moon.Moon(nil)
 	h.WithHeader("Access-Control-Allow-Origin", "*")
@@ -18,5 +22,6 @@ func main() {
 	go http.ListenAndServe(":8880", nil)
 
 	h.Routes.AddPost("upload/image", upload.Image)
+	h.Routes.Add(".+", "OPTIONS", optionsPoke)
 	moon.ServerRun(":8881", h)
 }
