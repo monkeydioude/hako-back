@@ -22,7 +22,8 @@ const (
 
 func getFileName(userID, name string) string {
 	p := strings.Split(name, ".")
-	fileName := tools.MD5(fmt.Sprintf("%s%d", TmpUserId, time.Now().Unix())).String()
+	m := tools.RandUnixNano(100)
+	fileName := tools.MD5(fmt.Sprintf("%s%s%d%d", TmpUserId, name, tools.RandUnixNano(m*100), time.Now().Unix())).String()
 	if len(p) >= 2 {
 		fileName = fmt.Sprintf("%s.%s", fileName, p[1])
 	}
