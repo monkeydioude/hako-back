@@ -12,7 +12,8 @@ func main() {
 	h := moon.Moon(nil)
 	h.WithHeader("Access-Control-Allow-Origin", "*")
 
-	os.Mkdir(upload.UploadedFilePath+upload.ImageDirectory, 0744)
+	os.Mkdir(upload.UploadedFilePath, 0766)
+	os.Mkdir(upload.UploadedFilePath+upload.ImageDirectory, 0766)
 	http.Handle("/", http.FileServer(http.Dir(upload.UploadedFilePath)))
 	go http.ListenAndServe(":8880", nil)
 
