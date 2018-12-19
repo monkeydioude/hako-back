@@ -1,8 +1,15 @@
 package asset
 
+const (
+	UploadedFilePath       = "/tmp/upload/"
+	ImageDirectory         = "img/"
+	TmpUserId              = "0"
+	TmpImageViewingBaseUrl = "http://localhost:8880"
+)
+
 type Asset struct {
-	Type string `json:"type"`
-	URL  string `json:"url"`
+	Type string `bson:"type" json:"type"`
+	URL  string `bson:"url" json:"url"`
 }
 
 type AssetsResponse struct {

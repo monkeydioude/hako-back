@@ -6,6 +6,8 @@ import (
 	"mime/multipart"
 	"os"
 
+	"github.com/monkeydioude/hako-back/pkg/asset"
+	"github.com/monkeydioude/hako-back/pkg/mongo"
 	"github.com/monkeydioude/moon"
 )
 
@@ -39,12 +41,17 @@ func saveImage(file multipart.File, name string) ([]byte, int, error) {
 	}
 
 	os.Mkdir(fmt.Sprintf("%s%s%s", UploadedFilePath, ImageDirectory, TmpUserId), 0766)
-
-	fileName := getFileName(TmpUserId, name)
-	fileExtendedPath := fmt.Sprintf("%s%s/%s", ImageDirectory, TmpUserId, fileName)
-	fileURL := fmt.Sprintf("%s/%s", TmpImageViewingBaseUrl, fileExtendedPath)
+	fileName, fileExtendedPath, fileURL := generateFileInfo(name)
 
 	err = ioutil.WriteFile(fmt.Sprintf("%s%s", UploadedFilePath, fileExtendedPath), data, 0666)
+	if err != nil {
+		return jsonResponseErr(err.Error(), 500)
+	}
+
+	_, err = mongo.Database("test").Collection("test").InsertOne(&asset.Asset{
+		URL:  fileURL,
+		Type: "image",
+	})
 	if err != nil {
 		return jsonResponseErr(err.Error(), 500)
 	}

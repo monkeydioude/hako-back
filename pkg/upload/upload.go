@@ -31,6 +31,14 @@ func getFileName(userID, name string) string {
 	return fileName
 }
 
+func generateFileInfo(name string) (string, string, string) {
+	fileName := getFileName(TmpUserId, name)
+	fileExtendedPath := fmt.Sprintf("%s%s/%s", ImageDirectory, TmpUserId, fileName)
+	fileURL := fmt.Sprintf("%s/%s", TmpImageViewingBaseUrl, fileExtendedPath)
+
+	return fileName, fileExtendedPath, fileURL
+}
+
 func jsonResponse(data interface{}) []byte {
 	res, err := json.Marshal(data)
 

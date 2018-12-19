@@ -6,12 +6,10 @@ import (
 	"io/ioutil"
 
 	"github.com/monkeydioude/moon"
-
-	"github.com/monkeydioude/hako-back/pkg/upload"
 )
 
 func getByUserId(userID string) ([]byte, int, error) {
-	userImgPath := fmt.Sprintf("%s%s%s", upload.UploadedFilePath, upload.ImageDirectory, userID)
+	userImgPath := fmt.Sprintf("%s%s%s", UploadedFilePath, ImageDirectory, userID)
 	files, err := ioutil.ReadDir(userImgPath)
 	if err != nil {
 		return []byte(`{
@@ -23,7 +21,7 @@ func getByUserId(userID string) ([]byte, int, error) {
 
 	ar := NewAssetsResponse()
 	for _, f := range files {
-		ar.PushAsset("image", fmt.Sprintf("%s/%s%s/%s", upload.TmpImageViewingBaseUrl, upload.ImageDirectory, userID, f.Name()))
+		ar.PushAsset("image", fmt.Sprintf("%s/%s%s/%s", TmpImageViewingBaseUrl, ImageDirectory, userID, f.Name()))
 	}
 
 	res, err := json.Marshal(ar)

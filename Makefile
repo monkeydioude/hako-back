@@ -1,4 +1,5 @@
 run:
+	docker-compose up -d
 	./bin/viewfile/viewfile&
 	./bin/upload/upload&
 	./bin/asset/asset&
