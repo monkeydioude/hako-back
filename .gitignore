@@ -5,6 +5,7 @@
 ./data/logs
 
 # Dev
-./dev/logs/*.log
+./dev/logs/
+!./dev/logs/.gitkeep 
 # Misc
 vendor
