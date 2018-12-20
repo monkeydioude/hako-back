@@ -4,4 +4,7 @@
 # MongoDB Docker
 ./data/logs
 
+# Dev
+./dev/logs/*.log
+# Misc
 vendor
