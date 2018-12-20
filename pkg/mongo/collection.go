@@ -6,12 +6,12 @@ import (
 	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
-type collection struct {
+type Collection struct {
 	Name string
 	coll *mongo.Collection
 }
 
-func (c *collection) InsertOne(data interface{}) (interface{}, error) {
+func (c *Collection) InsertOne(data interface{}) (interface{}, error) {
 	ctx, cf := context.WithTimeout(context.Background(), QueryTimeout)
 	res, err := c.coll.InsertOne(ctx, data)
 

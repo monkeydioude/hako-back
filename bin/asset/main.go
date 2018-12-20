@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"log"
+	"os"
 	"time"
 
 	"github.com/monkeydioude/hako-back/pkg/asset"
@@ -11,11 +14,18 @@ const (
 	connectTimeout = 10 * time.Second
 )
 
-func main() {
-	// mw.Connect("mongodb://localhost:27017", connectTimeout)
+var serverPort string
 
+func init() {
+	serverPort = os.Getenv("SERVER_PORT")
+	if serverPort == "" {
+		log.Fatal("[ERR ] valid SERVER_PORT env var must be given")
+	}
+}
+
+func main() {
 	a := moon.Moon(nil)
 	a.WithHeader("Access-Control-Allow-Origin", "*")
 	a.Routes.AddGet("image/all", asset.GetAllImage)
-	moon.ServerRun(":8882", a)
+	moon.ServerRun(fmt.Sprintf(":%s", serverPort), a)
 }

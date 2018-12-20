@@ -13,6 +13,10 @@ const (
 	QueryTimeout = 5 * time.Second
 )
 
+type Storeable interface {
+	Store(*DB) (interface{}, error)
+}
+
 func Connect(uri string, timeout time.Duration) error {
 	var err error
 	ctx, cf := context.WithTimeout(context.Background(), timeout)

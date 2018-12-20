@@ -1,49 +1,51 @@
 package asset
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"time"
 
-	"github.com/monkeydioude/moon"
+	"github.com/monkeydioude/hako-back/pkg/mongo"
 )
 
-func getByUserId(userID string) ([]byte, int, error) {
-	userImgPath := fmt.Sprintf("%s%s%s", UploadedFilePath, ImageDirectory, userID)
-	files, err := ioutil.ReadDir(userImgPath)
-	if err != nil {
-		return []byte(`{
-			"status": "could not find files for specific user",
-			"code": 500
-		}
-		`), 500, nil
-	}
-
-	ar := NewAssetsResponse()
-	for _, f := range files {
-		ar.PushAsset("image", fmt.Sprintf("%s/%s%s/%s", TmpImageViewingBaseUrl, ImageDirectory, userID, f.Name()))
-	}
-
-	res, err := json.Marshal(ar)
-	if err != nil {
-		return []byte(`{
-			"status": "could not marshal files",
-			"code": 500
-		}
-		`), 500, nil
-	}
-
-	return res, 200, nil
+type Image struct {
+	ID           string `bson:"id" json:"id"`
+	Type         string `bson:"type" json:"type"`
+	URL          string `bson:"url" json:"url"`
+	DateCreation int64  `bson:"date_creation" json:"date_creation"`
+	UserID       string `bson:"user_id" json:"user_id"`
 }
 
-func GetAllImage(r *moon.Request, c *moon.Configuration) ([]byte, int, error) {
-	if _, ok := r.QueryString["user_id"]; ok {
-		return getByUserId(r.QueryString["user_id"])
+func NewImage(name, uid, url string) *Image {
+	now := time.Now().Unix()
+	return &Image{
+		ID:           fmt.Sprintf("%s%s%d", uid, name, now),
+		Type:         "image",
+		URL:          url,
+		DateCreation: now,
+		UserID:       uid,
 	}
+}
 
-	return []byte(`{
-		"status": "not found",
-		"code": 404
-	}
-	`), 404, nil
+func (i *Image) GetType() string {
+	return i.Type
+}
+
+func (i *Image) GetURL() string {
+	return i.URL
+}
+
+func (i *Image) GetID() string {
+	return i.ID
+}
+
+func (i *Image) GetUserID() string {
+	return i.UserID
+}
+
+func (i *Image) GetDateCreation() int64 {
+	return i.DateCreation
+}
+
+func (i *Image) Store(db *mongo.DB) (interface{}, error) {
+	return db.Collection("asset").InsertOne(i)
 }

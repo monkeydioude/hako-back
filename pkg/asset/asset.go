@@ -1,5 +1,9 @@
 package asset
 
+import (
+	"github.com/monkeydioude/hako-back/pkg/mongo"
+)
+
 const (
 	UploadedFilePath       = "/tmp/upload/"
 	ImageDirectory         = "img/"
@@ -7,20 +11,21 @@ const (
 	TmpImageViewingBaseUrl = "http://localhost:8880"
 )
 
-type Asset struct {
-	Type string `bson:"type" json:"type"`
-	URL  string `bson:"url" json:"url"`
+type Asset interface {
+	GetType() string
+	GetURL() string
+	GetID() string
+	GetUserID() string
+	GetDateCreation() int64
+	mongo.Storeable
 }
 
 type AssetsResponse struct {
 	Assets []Asset `json:"assets"`
 }
 
-func (ar *AssetsResponse) PushAsset(t, url string) {
-	ar.Assets = append(ar.Assets, Asset{
-		Type: t,
-		URL:  url,
-	})
+func (ar *AssetsResponse) PushAsset(a Asset) {
+	ar.Assets = append(ar.Assets, a)
 }
 
 func NewAssetsResponse() *AssetsResponse {
