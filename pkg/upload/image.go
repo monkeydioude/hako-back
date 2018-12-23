@@ -14,7 +14,6 @@ const (
 	ImageDirectory         = "img/"
 	TmpUserId              = "0"
 	TmpImageViewingBaseUrl = "http://localhost:8880"
-	databaseName           = "upload"
 )
 
 func saveImage(file multipart.File, name string) ([]byte, int, error) {
@@ -34,7 +33,7 @@ func saveImage(file multipart.File, name string) ([]byte, int, error) {
 	}
 
 	img := asset.NewImage(fileName, TmpUserId, fileURL)
-	_, err = img.Store(mongo.Database(databaseName))
+	_, err = img.Store(mongo.Database(asset.DatabaseName))
 
 	if err != nil {
 		return jsonResponseErr(err.Error(), 500)

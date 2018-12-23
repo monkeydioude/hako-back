@@ -10,7 +10,7 @@ type response struct {
 	Code   int16        `json:"code"`
 }
 
-func Image(r *moon.Request, c *moon.Configuration) ([]byte, int, error) {
+func Image(r *moon.Request) ([]byte, int, error) {
 	f, h, err := r.HTTPRequest.FormFile("file")
 	if err != nil {
 		return []byte(err.Error()), 500, nil

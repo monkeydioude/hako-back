@@ -30,16 +30,18 @@ func init() {
 	}
 }
 
-func optionsPoke(r *moon.Request, c *moon.Configuration) ([]byte, int, error) {
+func optionsPoke(r *moon.Request) ([]byte, int, error) {
 	return []byte("OK"), 200, nil
 }
 
 func main() {
 	mongo.Connect(mongoDBAddr, connectTimeout)
+	server := moon.Moon()
+	server.AddHeader("Access-Control-Allow-Origin", "*")
 
-	u := moon.Moon(nil)
-	u.WithHeader("Access-Control-Allow-Origin", "*")
-	u.Routes.AddPost("upload/image", upload.Image)
-	u.Routes.Add(".+", "OPTIONS", optionsPoke)
-	moon.ServerRun(fmt.Sprintf(":%s", serverPort), u)
+	server.MakeRouter(
+		moon.Post("upload/image", upload.Image),
+		moon.Options(".+", optionsPoke),
+	)
+	moon.ServerRun(fmt.Sprintf(":%s", serverPort), server)
 }

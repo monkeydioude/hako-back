@@ -8,7 +8,7 @@ start:
 	@docker-compose up -d
 	(SERVER_PORT=$(VIEWFILE_SERVER_PORT) ./bin/viewfile/viewfile 2>> ./dev/logs/viewfile.log)&
 	(SERVER_PORT=$(UPLOAD_SERVER_PORT) MONGODB_ADDR=$(MONGODB_ADDR) ./bin/upload/upload 2>> ./dev/logs/upload.log)&
-	(SERVER_PORT=$(ASSET_SERVER_PORT) ./bin/asset/asset 2>> ./dev/logs/asset.log)&
+	(SERVER_PORT=$(ASSET_SERVER_PORT) MONGODB_ADDR=$(MONGODB_ADDR) ./bin/asset/asset 2>> ./dev/logs/asset.log)&
 
 build:
 	@echo "rebuilding services"

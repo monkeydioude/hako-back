@@ -1,16 +1,18 @@
 package asset
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-
+	"github.com/monkeydioude/hako-back/pkg/mongo"
 	"github.com/monkeydioude/moon"
 )
 
+const (
+	DatabaseName = "asset"
+)
+
 func getByUserId(userID string) ([]byte, int, error) {
-	userImgPath := fmt.Sprintf("%s%s%s", UploadedFilePath, ImageDirectory, userID)
-	files, err := ioutil.ReadDir(userImgPath)
+	cur, err := mongo.Database(DatabaseName).Collection("asset").Find(&Image{
+		UserID: userID,
+	})
 	if err != nil {
 		return []byte(`{
 			"status": "could not find files for specific user",
@@ -19,24 +21,21 @@ func getByUserId(userID string) ([]byte, int, error) {
 		`), 500, nil
 	}
 
-	ar := NewAssetsResponse()
-	for _, f := range files {
-		ar.PushAsset(NewImage(f.Name(), userID, fmt.Sprintf("%s/%s%s/%s", TmpImageViewingBaseUrl, ImageDirectory, userID, f.Name())))
-	}
+	res, err := cur.JSONMarshal(&Image{})
 
-	res, err := json.Marshal(ar)
+	// res, err := json.Marshal(ar)
 	if err != nil {
 		return []byte(`{
 			"status": "could not marshal files",
-			"code": 500
+			"code": 500,
 		}
-		`), 500, nil
+		`), 500, err
 	}
 
 	return res, 200, nil
 }
 
-func GetAllImage(r *moon.Request, c *moon.Configuration) ([]byte, int, error) {
+func GetAllImage(r *moon.Request) ([]byte, int, error) {
 	if _, ok := r.QueryString["user_id"]; ok {
 		return getByUserId(r.QueryString["user_id"])
 	}

@@ -53,8 +53,8 @@
 [[projects]]
   name = "github.com/monkeydioude/moon"
   packages = ["."]
-  revision = "9fdf97b305f37213f0038b9b3781cbe8cdddfaa0"
-  version = "1.5.0"
+  revision = "ff32f503316e6fb21c4f8276139e3b39a8e3c783"
+  version = "1.6.0"
 
 [[projects]]
   name = "github.com/monkeydioude/tools"
@@ -84,7 +84,7 @@
   branch = "master"
   name = "golang.org/x/sync"
   packages = ["semaphore"]
-  revision = "42b317875d0fa942474b76e1b46a6060d720ae6e"
+  revision = "37e7f081c4d4c64e13b10787722085407fe5d15f"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -102,6 +102,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "674a488cf5c9b5bca87ca94b97c39705b1d6684f2f43019a15e98c0cedd6b215"
+  inputs-digest = "73d3fe43b38ff57d3f3df8910613a0130042824ae00213c80780379ca214aa29"
   solver-name = "gps-cdcl"
   solver-version = 1

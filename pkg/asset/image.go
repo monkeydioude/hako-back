@@ -8,11 +8,11 @@ import (
 )
 
 type Image struct {
-	ID           string `bson:"id" json:"id"`
-	Type         string `bson:"type" json:"type"`
-	URL          string `bson:"url" json:"url"`
-	DateCreation int64  `bson:"date_creation" json:"date_creation"`
-	UserID       string `bson:"user_id" json:"user_id"`
+	ID           string `bson:"id,omitempty" json:"id"`
+	Type         string `bson:"type,omitempty" json:"type"`
+	URL          string `bson:"url,omitempty" json:"url"`
+	DateCreation int64  `bson:"date_creation,omitempty" json:"date_creation"`
+	UserID       string `bson:"user_id,omitempty" json:"user_id"`
 }
 
 func NewImage(name, uid, url string) *Image {
@@ -48,4 +48,8 @@ func (i *Image) GetDateCreation() int64 {
 
 func (i *Image) Store(db *mongo.DB) (interface{}, error) {
 	return db.Collection("asset").InsertOne(i)
+}
+
+func (i *Image) Spawn() mongo.Spawnable {
+	return &Image{}
 }
