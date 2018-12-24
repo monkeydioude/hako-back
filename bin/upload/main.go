@@ -40,8 +40,8 @@ func main() {
 	server.AddHeader("Access-Control-Allow-Origin", "*")
 
 	server.MakeRouter(
-		moon.Post("upload/image", upload.Image),
-		moon.Options(".+", optionsPoke),
+		moon.Post("/upload/image", upload.Image),
+		moon.Options("/upload/image", optionsPoke),
 	)
 	moon.ServerRun(fmt.Sprintf(":%s", serverPort), server)
 }

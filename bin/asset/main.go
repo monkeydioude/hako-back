@@ -36,7 +36,8 @@ func main() {
 	server.AddHeader("Access-Control-Allow-Origin", "*")
 
 	server.MakeRouter(
-		moon.Get("image/all", asset.GetAllImage),
+		moon.Get("/image/all", asset.GetAllImage),
+		moon.Delete("/image/{id}", asset.DeleteImage),
 	)
 
 	moon.ServerRun(fmt.Sprintf(":%s", serverPort), server)

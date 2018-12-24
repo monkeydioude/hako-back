@@ -19,15 +19,3 @@ type Asset interface {
 	GetDateCreation() int64
 	mongo.Storeable
 }
-
-type AssetsResponse struct {
-	Assets []Asset `json:"assets"`
-}
-
-func (ar *AssetsResponse) PushAsset(a Asset) {
-	ar.Assets = append(ar.Assets, a)
-}
-
-func NewAssetsResponse() *AssetsResponse {
-	return &AssetsResponse{}
-}

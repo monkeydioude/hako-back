@@ -9,7 +9,7 @@ const (
 	DatabaseName = "asset"
 )
 
-func getByUserId(userID string) ([]byte, int, error) {
+func getByUserID(userID string) ([]byte, int, error) {
 	cur, err := mongo.Database(DatabaseName).Collection("asset").Find(&Image{
 		UserID: userID,
 	})
@@ -23,7 +23,6 @@ func getByUserId(userID string) ([]byte, int, error) {
 
 	res, err := cur.JSONMarshal(&Image{})
 
-	// res, err := json.Marshal(ar)
 	if err != nil {
 		return []byte(`{
 			"status": "could not marshal files",
@@ -37,12 +36,25 @@ func getByUserId(userID string) ([]byte, int, error) {
 
 func GetAllImage(r *moon.Request) ([]byte, int, error) {
 	if _, ok := r.QueryString["user_id"]; ok {
-		return getByUserId(r.QueryString["user_id"])
+		return getByUserID(r.QueryString["user_id"])
 	}
 
 	return []byte(`{
 		"status": "not found",
 		"code": 404
+	}`), 404, nil
+}
+
+func DeleteImage(r *moon.Request) ([]byte, int, error) {
+	if _, ok := r.Matches["id"]; !ok {
+		return []byte(`{
+			"status": "not found",
+			"code": 404
+		}`), 404, nil
 	}
-	`), 404, nil
+
+	return []byte(`{
+		"status": "ok",
+		"code": 200
+	}`), 200, nil
 }

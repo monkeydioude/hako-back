@@ -7,7 +7,7 @@ import (
 )
 
 type Element struct {
-	Result *mongo.SingleResult
+	Result *mongo.DocumentResult
 	Ctx    context.Context
 }
 
