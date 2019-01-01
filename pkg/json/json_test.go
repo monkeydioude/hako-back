@@ -12,7 +12,7 @@ func TestICanBuildArrayWithStrings(t *testing.T) {
 		String("b"),
 		String("c"),
 	)
-	res := trial.Process()
+	res := trial.Bytes()
 
 	if string(res) != goal {
 		t.Fail()
@@ -30,7 +30,7 @@ func TestICanBuildObjectWithString(t *testing.T) {
 		Key("c").String("C"),
 	)
 
-	json.Unmarshal(object.Process(), &trial)
+	json.Unmarshal(object.Bytes(), &trial)
 
 	if trial["a"] != goal["a"] ||
 		trial["b"] != goal["b"] ||
@@ -60,7 +60,7 @@ func TestICanBuildObjectWithStringsAndArrays(t *testing.T) {
 		),
 	)
 
-	json.Unmarshal(object.Process(), &trial)
+	json.Unmarshal(object.Bytes(), &trial)
 
 	if trial["c"][0]["z"] != goal["c"][0]["z"] ||
 		trial["c"][0]["y"] != goal["c"][0]["y"] ||

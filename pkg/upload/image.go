@@ -11,33 +11,40 @@ import (
 )
 
 const (
-	ImageDirectory         = "img/"
-	TmpUserId              = "0"
-	TmpImageViewingBaseUrl = "http://localhost:8880"
+	ImageDirectory = "img/"
+	TmpUserId      = "0"
 )
 
-func saveImage(file multipart.File, name string) ([]byte, int, error) {
+func saveImage(file multipart.File, name, mimeType string) ([]byte, int, error) {
 	data, err := ioutil.ReadAll(file)
-
+	UID := TmpUserId
 	if err != nil {
-		return jsonResponseErr(err.Error(), 500)
+		return jsonResponseErr(err, 500)
 	}
 
 	// Might need to add Stat on file here
-	os.Mkdir(fmt.Sprintf("%s%s%s", UploadedFilePath, ImageDirectory, TmpUserId), 0766)
-	fileName, fileExtendedPath, fileURL := generateFileInfo(name)
-	err = ioutil.WriteFile(fmt.Sprintf("%s%s", UploadedFilePath, fileExtendedPath), data, 0666)
+	os.Mkdir(fmt.Sprintf("%s%s%s", UploadedFilePath, ImageDirectory, UID), 0766)
+	ID := generateID(UID, name)
+	err = ioutil.WriteFile(fmt.Sprintf("%s%s%s/%s", UploadedFilePath, ImageDirectory, UID, ID), data, 0666)
 
 	if err != nil {
-		return jsonResponseErr(err.Error(), 500)
+		return jsonResponseErr(err, 500)
 	}
 
-	img := asset.NewImage(fileName, TmpUserId, fileURL)
+	img := asset.NewImage(UID, ID)
 	_, err = img.Store(mongo.Database(asset.DatabaseName))
 
 	if err != nil {
-		return jsonResponseErr(err.Error(), 500)
+		return jsonResponseErr(err, 500)
 	}
 
-	return jsonResponseOk(dataResponse{"id": img.ID, "url": fileURL})
+	return jsonResponseOk(dataResponse{"id": img.ID, "url": asset.GenerateImageURL(asset.TmpImageViewingPath, UID, ID)})
+}
+
+func deleteImage(id, uid string) ([]byte, int, error) {
+	err := os.Remove(fmt.Sprintf("%s%s%s/%s", UploadedFilePath, ImageDirectory, uid, id))
+	if err != nil {
+		return jsonResponseErr(err, 500)
+	}
+	return jsonResponseOk(nil)
 }

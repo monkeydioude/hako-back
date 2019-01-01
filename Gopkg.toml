@@ -1,6 +1,6 @@
 [[constraint]]
   name = "github.com/monkeydioude/moon"
-  version = "1.6.0"
+  version = "2.1.2"
 
 [[constraint]]
   name = "github.com/monkeydioude/tools"

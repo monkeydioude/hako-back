@@ -10,20 +10,22 @@ import (
 type Image struct {
 	ID           string `bson:"id,omitempty" json:"id"`
 	Type         string `bson:"type,omitempty" json:"type"`
-	URL          string `bson:"url,omitempty" json:"url"`
+	URL          string `json:"url,omitempty"`
 	DateCreation int64  `bson:"date_creation,omitempty" json:"date_creation"`
 	UserID       string `bson:"user_id,omitempty" json:"user_id"`
 }
 
-func NewImage(name, uid, url string) *Image {
-	now := time.Now().Unix()
+func NewImage(UID, ID string) *Image {
 	return &Image{
-		ID:           fmt.Sprintf("%s%s%d", uid, name, now),
+		ID:           ID,
 		Type:         "image",
-		URL:          url,
-		DateCreation: now,
-		UserID:       uid,
+		DateCreation: time.Now().Unix(),
+		UserID:       UID,
 	}
+}
+
+func GenerateImageURL(imgBaseURL, userID, ID string) string {
+	return fmt.Sprintf("%s%s/%s", imgBaseURL, userID, ID)
 }
 
 func (i *Image) GetType() string {
@@ -52,4 +54,8 @@ func (i *Image) Store(db *mongo.DB) (interface{}, error) {
 
 func (i *Image) Spawn() mongo.Spawnable {
 	return &Image{}
+}
+
+func (i *Image) GenerateUrl(imgBaseURL string) string {
+	return fmt.Sprintf("%s%s/%s", imgBaseURL, i.UserID, i.ID)
 }

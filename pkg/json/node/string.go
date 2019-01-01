@@ -14,9 +14,9 @@ func NewString(k, v string) *String {
 	}
 }
 
-func (s *String) Add(n []Node) {}
+func (s *String) Add(n Node) {}
 
-func (s *String) Process() []byte {
+func (s *String) Bytes() []byte {
 	b := &bytes.Buffer{}
 	WriteString(b, s.Value)
 	return b.Bytes()

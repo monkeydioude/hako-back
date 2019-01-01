@@ -52,9 +52,12 @@
 
 [[projects]]
   name = "github.com/monkeydioude/moon"
-  packages = ["."]
-  revision = "ff32f503316e6fb21c4f8276139e3b39a8e3c783"
-  version = "1.6.0"
+  packages = [
+    ".",
+    "pkg/purl"
+  ]
+  revision = "8ddd8a3a9492fe2a56153c0b3255d7ee4a9e91f6"
+  version = "2.1.2"
 
 [[projects]]
   name = "github.com/monkeydioude/tools"
@@ -102,6 +105,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "73d3fe43b38ff57d3f3df8910613a0130042824ae00213c80780379ca214aa29"
+  inputs-digest = "0527570ea77a90289df41de15ec17fd25f6b2945e9562fccf674eb633c5840a3"
   solver-name = "gps-cdcl"
   solver-version = 1

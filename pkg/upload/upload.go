@@ -3,7 +3,6 @@ package upload
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/monkeydioude/tools"
@@ -13,24 +12,20 @@ const (
 	UploadedFilePath = "/tmp/upload/"
 )
 
-func getFileName(userID, name string) (string, string) {
-	p := strings.Split(name, ".")
+func generateID(userID, name string) string {
 	m := tools.RandUnixNano(100)
-	ext := ""
-	fileName := tools.MD5(fmt.Sprintf("%s%s%d%d", TmpUserId, name, tools.RandUnixNano(m*100), time.Now().Unix())).String()
-	if len(p) >= 2 {
-		ext = fmt.Sprintf(".%s", p[1])
-	}
+	now := time.Now().Unix()
+	ID := tools.MD5(
+		fmt.Sprintf(
+			"%s%s%d%d",
+			userID,
+			name,
+			tools.RandUnixNano(m*100),
+			now,
+		),
+	).String()
 
-	return fileName, ext
-}
-
-func generateFileInfo(name string) (string, string, string) {
-	fileName, fileNameExt := getFileName(TmpUserId, name)
-	fileExtendedPath := fmt.Sprintf("%s%s/%s%s", ImageDirectory, TmpUserId, fileName, fileNameExt)
-	fileURL := fmt.Sprintf("%s/%s", TmpImageViewingBaseUrl, fileExtendedPath)
-
-	return fileName, fileExtendedPath, fileURL
+	return fmt.Sprintf("%s%s%d", userID, ID, now)
 }
 
 func jsonResponse(data interface{}) []byte {
@@ -54,9 +49,16 @@ func jsonResponseOk(data dataResponse) ([]byte, int, error) {
 	}), 200, nil
 }
 
-func jsonResponseErr(status string, code int) ([]byte, int, error) {
+func jsonResponseErr(err error, code int) ([]byte, int, error) {
 	return jsonResponse(response{
-		Status: status,
+		Status: err.Error(),
 		Code:   int16(code),
-	}), code, nil
+	}), code, err
+}
+
+func jsonResponse404() ([]byte, int, error) {
+	return jsonResponse(response{
+		Status: "not found",
+		Code:   404,
+	}), 404, nil
 }

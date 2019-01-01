@@ -5,8 +5,8 @@ import (
 )
 
 type Node interface {
-	Process() []byte
-	Add([]Node)
+	Bytes() []byte
+	Add(Node)
 	GetKey() string
 }
 

@@ -9,6 +9,8 @@ const (
 	ImageDirectory         = "img/"
 	TmpUserId              = "0"
 	TmpImageViewingBaseUrl = "http://localhost:8880"
+	TmpImageViewingPath    = "http://localhost:8880/img/"
+	TmpUploadURL           = "http://localhost:8881/upload"
 )
 
 type Asset interface {

@@ -1,6 +1,8 @@
 package upload
 
-import "github.com/monkeydioude/moon"
+import (
+	"github.com/monkeydioude/moon"
+)
 
 type dataResponse map[string]interface{}
 
@@ -20,9 +22,16 @@ func Image(r *moon.Request) ([]byte, int, error) {
 	mimeType := h.Header.Get("Content-Type")
 	switch mimeType {
 	case "image/jpeg":
-		return saveImage(f, h.Filename)
+		return saveImage(f, h.Filename, mimeType)
 	case "image/png":
-		return saveImage(f, h.Filename)
+		return saveImage(f, h.Filename, mimeType)
 	}
 	return []byte("no mimetype found"), 404, nil
+}
+
+func DeleteImage(r *moon.Request) ([]byte, int, error) {
+	if r.Matches["id"] == "" || r.Matches["user_id"] == "" {
+		return jsonResponse404()
+	}
+	return deleteImage(r.Matches["id"], r.Matches["user_id"])
 }

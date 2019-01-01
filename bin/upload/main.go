@@ -42,6 +42,7 @@ func main() {
 	server.MakeRouter(
 		moon.Post("/upload/image", upload.Image),
 		moon.Options("/upload/image", optionsPoke),
+		moon.Delete("/upload/user/{user_id}/image/{id}", upload.DeleteImage),
 	)
 	moon.ServerRun(fmt.Sprintf(":%s", serverPort), server)
 }

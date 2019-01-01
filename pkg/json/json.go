@@ -6,13 +6,17 @@ import (
 
 func Array(nodes ...node.Node) *node.Array {
 	a := &node.Array{}
-	a.Add(nodes)
+	for _, n := range nodes {
+		a.Add(n)
+	}
 	return a
 }
 
 func Object(nodes ...node.Node) *node.Object {
 	o := node.NewObject("")
-	o.Add(nodes)
+	for _, n := range nodes {
+		o.Add(n)
+	}
 	return o
 }
 
@@ -40,13 +44,17 @@ func Key(k string) *key {
 
 func (k *key) Array(nodes ...node.Node) *node.Array {
 	a := node.NewArray(k.key)
-	a.Add(nodes)
+	for _, n := range nodes {
+		a.Add(n)
+	}
 	return a
 }
 
 func (k *key) Object(nodes ...node.Node) *node.Object {
 	o := node.NewObject(k.key)
-	o.Add(nodes)
+	for _, n := range nodes {
+		o.Add(n)
+	}
 	return o
 }
 

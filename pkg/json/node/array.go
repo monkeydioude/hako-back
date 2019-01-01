@@ -13,19 +13,17 @@ func NewArray(key string) *Array {
 	}
 }
 
-func (a *Array) Add(nodes []Node) {
-	for _, n := range nodes {
-		a.Childs = append(a.Childs, n)
-	}
+func (a *Array) Add(n Node) {
+	a.Childs = append(a.Childs, n)
 }
 
-func (a *Array) Process() []byte {
+func (a *Array) Bytes() []byte {
 	b := bytes.NewBuffer([]byte{'['})
 	for i, n := range a.Childs {
 		if i > 0 {
 			b.WriteByte(',')
 		}
-		b.Write(n.Process())
+		b.Write(n.Bytes())
 	}
 	b.WriteByte(']')
 

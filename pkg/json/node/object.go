@@ -14,13 +14,11 @@ func NewObject(key string) *Object {
 	}
 }
 
-func (o *Object) Add(nodes []Node) {
-	for _, n := range nodes {
-		o.Nodes[n.GetKey()] = n
-	}
+func (o *Object) Add(n Node) {
+	o.Nodes[n.GetKey()] = n
 }
 
-func (o *Object) Process() []byte {
+func (o *Object) Bytes() []byte {
 	b := bytes.NewBuffer([]byte{'{'})
 	iterated := false
 	for k, n := range o.Nodes {
@@ -29,7 +27,7 @@ func (o *Object) Process() []byte {
 		}
 		iterated = true
 		WriteKey(b, k)
-		b.Write(n.Process())
+		b.Write(n.Bytes())
 	}
 	b.WriteByte('}')
 
